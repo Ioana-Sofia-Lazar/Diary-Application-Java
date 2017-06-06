@@ -5,16 +5,23 @@ import classes.Settings;
 import classes.User;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import packets.deleteAccountPacket;
 import packets.loginPacket;
 import packets.loginResponsePacket;
 import packets.signupPacket;
@@ -49,18 +56,27 @@ public class ServerHandler extends Thread{
                              
                 if(message instanceof loginPacket) {
                     loginPacket msg = (loginPacket) message;
-                    handleLogin(msg.getUsername(), msg.getPassword());
+                    loginResponsePacket handlerResponse = handleLogin(msg.getUsername(), msg.getPassword());
+                    out.writeObject(handlerResponse);
+                    out.flush();
                 }
                 if(message instanceof signupPacket) {
                     signupPacket msg = (signupPacket) message;
                     int handlerResponse = handleSignup(msg.getUsername(), msg.getPassword());
                     out.writeObject(handlerResponse);
+                    out.flush();
+                }
+                if(message instanceof deleteAccountPacket) {
+                    deleteAccountPacket msg = (deleteAccountPacket) message;
+                    int handlerResponse = deleteUser(msg.getId());
+                    out.writeObject(handlerResponse);
+                    out.flush();
                 }
             }
         } catch (IOException e) {
-            System.out.println("Unexpected error on client input/output streams");
+            System.out.println("Unexpected error on user input/output streams");
         } catch (ClassNotFoundException e){
-            System.out.println("There was a problem decoding message from client");
+            System.out.println("There was a problem decoding message from user");
         } finally {
             try {
                 DBConnection.close();
@@ -81,7 +97,53 @@ public class ServerHandler extends Thread{
         }
     }
     
-    private int validateSignup(String username) {
+    private int deleteUser(int id) {
+        // delete user
+        String query = "DELETE FROM user WHERE id_user = ? ";
+        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+            st.setInt(1, id);
+        
+            if((st.executeUpdate()) != 1) {  
+                return -1;                     
+            }                             
+        }
+        catch(Exception e) {
+            System.out.println("error at deleting user");
+            e.printStackTrace();
+        }  
+        
+        // delete his settings
+        query = "DELETE FROM settings WHERE id_user = ? ";
+        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+            st.setInt(1, id);
+        
+            if((st.executeUpdate()) != 1) {  
+                return -1;                     
+            }                             
+        }
+        catch(Exception e) {
+            System.out.println("error at deleting user settings");
+            e.printStackTrace();
+        }  
+        
+        // delete his entries
+        query = "DELETE FROM entry WHERE id_user = ? ";
+        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+            st.setInt(1, id);
+        
+            if((st.executeUpdate()) != 1) {  
+                return -1;                     
+            }                             
+        }
+        catch(Exception e) {
+            System.out.println("error at deleting user entries");
+            e.printStackTrace();
+        }  
+        
+        return 1;
+    }
+    
+    private int validateSignup(String username) {System.out.println("vaidating signup for " + username);
         String query = "SELECT * FROM user WHERE username = ?;";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
             st.setString(1, username);
@@ -91,7 +153,7 @@ public class ServerHandler extends Thread{
             }    
         }
         catch(Exception e) {
-            System.out.println("error at validating login");
+            System.out.println("error at validating signup");
             e.printStackTrace();
         }
         return -1;
@@ -99,10 +161,14 @@ public class ServerHandler extends Thread{
     
     // add user to database and return the id or -1 if error
     private int addUser(String username, String password) {
-        String query = "INSERT INTO user (username, password) VALUES (?, ?);";
+        String query = "INSERT INTO user (username, password, birthdate, profile_pic) VALUES (?, ?, ?, ?);";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+            File imgfile = new File("default_profile.jpg");
+            FileInputStream fin = new FileInputStream(imgfile);
             st.setString(1, username);
             st.setString(2, password);
+            st.setDate(3, Date.valueOf("1990-01-01"));
+            st.setBinaryStream(4, (InputStream)fin, (int)imgfile.length());
 
             if((st.executeUpdate()) != 1) {
                 return -1;    
@@ -140,38 +206,38 @@ public class ServerHandler extends Thread{
             }              
         }
         catch(Exception e) {
-            System.out.println("error at adding user");
+            System.out.println("error at adding user default settings");
             e.printStackTrace();
         }
         return -1;
     }
     
     // 1 for successfull adding new user, -1 if user already exists, -2 for another error
-    private int handleSignup(String username, String password) {
+    private int handleSignup(String username, String password) {System.out.println("handle signup for " + username + " " + password);
         int found = validateSignup(username);
         if(found == 1) // if user already exists then error
             return -1;
-        
+
         // add user to database
         int id = addUser(username, password);
         if(id == -1)
             return -2;
-        
+
         // add default settings for new user
         int res = addDefaultSettings(id);
         if(res == -1)
             return -2;
-        
+
         return 1;
     }
     
-    private User validateLogin(String username, String password) {
+    private User validateLogin(String username, String password) {System.out.println("vaidating login for " + username);
         String query = "SELECT * FROM user WHERE username = ? AND password = ?;";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
             st.setString(1, username);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
-            if(rs.next()) { // there is a client with this username
+            if(rs.next()) { // there is a user with this username
                 // get profile pic
                 byte[] image = rs.getBytes("profile_pic");
                 ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(image));
@@ -188,7 +254,7 @@ public class ServerHandler extends Thread{
     }
     
     private Settings getSettings(int id) {
-        String query = "SELECT * FROM settings WHERE id_client = ?;";
+        String query = "SELECT * FROM settings WHERE id_user = ?;";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -203,7 +269,7 @@ public class ServerHandler extends Thread{
         return null;
     }
     
-    private void handleLogin(String username, String password) {
+    private loginResponsePacket handleLogin(String username, String password) { System.out.println("handle login for " + username + " " + password);
         loginResponsePacket handlerResponse = new loginResponsePacket(null, null, null);
         User user = validateLogin(username, password);    
         Settings s;
@@ -215,19 +281,13 @@ public class ServerHandler extends Thread{
             handlerResponse = new loginResponsePacket(user, s, entries);
         }
         
-        try {
-            out.writeObject(handlerResponse);
-            out.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        return handlerResponse;
     }
     
     private HashMap<Integer, Entry> getEntries(int id) {
         HashMap<Integer, Entry> entr = new HashMap<>();
         
-        String query = "SELECT * FROM settings WHERE id = ?;";
+        String query = "SELECT * FROM entry WHERE id_user = ?;";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -238,165 +298,10 @@ public class ServerHandler extends Thread{
             } 
         }
         catch(Exception e) {
-            System.out.println("error at getting settings");
+            System.out.println("error at getting entries");
             e.printStackTrace();
         }        
         return entr;
     }
- 
-    // adds invoice to DB
-    private void saveInvoice(int id, double val, String for_m_y, double day_cons, double night_cons, double morning_cons) {
-        String query = "INSERT INTO invoice(id_client, value, date, for_month, day_cons, night_cons, morning_cons)" + 
-                    "VALUES(?, ?, STR_TO_DATE(CURDATE(), '%Y-%m-%d'), STR_TO_DATE(?, '%Y-%m-%d'), ?, ?, ?)" ;        
-        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            st.setInt(1, id);
-            st.setDouble(2, val);
-            st.setString(3, for_m_y);
-            st.setDouble(4, day_cons);
-            st.setDouble(5, night_cons);
-            st.setDouble(6, morning_cons);
 
-            if((st.executeUpdate()) == 1) {
-                System.out.println("Invoice added to DB successfully.");          
-            }              
-            else
-                System.out.println("Invoice not added to DB.");
-        }
-        catch(Exception e) {
-            System.out.println("error at adding data");
-            e.printStackTrace();
-        }
-    }
-    
-    private int getInvoiceforCM(int id_c, String for_m_y) {
-        String query = "SELECT * FROM invoice WHERE id_client = ? and STR_TO_DATE(?, '%Y-%m-%d') = for_month;";
-        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            st.setInt(1, id_c);
-            st.setString(2, for_m_y);
-            ResultSet rs = st.executeQuery();
-            if(rs.next()) { // there already is an invoice in the database for this client and for this month
-                return rs.getInt("id_invoice");
-            }    
-        }
-        catch(Exception e) {
-            System.out.println("error at getting indexes list");
-            e.printStackTrace();
-        }
-        return -1;
-    }
-    
-    // searches for client with id, returns -1 if not found
-    private int getClientWithId(int id) {
-        String query = "SELECT * FROM client WHERE id_client = ?";
-               
-        try (PreparedStatement st = DBConnection.prepareStatement(query);){
-            st.setInt(1, id);
-            
-            ResultSet rs = st.executeQuery();
-            int count = 0;
-            while(rs.next()) 
-                count++;
-            if(count == 0) { // if there is no client with the given id                
-                return -1;
-            }               
-        }
-        catch(Exception e) {
-            System.out.println("id not ok");
-            e.printStackTrace();
-        }
-        return id; // valid ID
-    }
-    
-    // inserts new index
-    private Integer saveIndex(int id, String dt, String for_m_y, int index_type, double dayIndex, double nightIndex, double morningIndex) {                                                
-        String query = "INSERT INTO idx (id_client, date, for_month, index_type, day_index, night_index, morning_index) VALUES (?, STR_TO_DATE(?, '%Y-%m-%d'), STR_TO_DATE(?, '%Y-%m-%d'), ?, ?, ?, ?);";
-
-        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            st.setInt(1, id);
-            st.setString(2, dt);
-            st.setString(3, for_m_y);
-            st.setInt(4, index_type);
-            st.setDouble(5, dayIndex);
-            st.setDouble(6, nightIndex);
-            st.setDouble(7, morningIndex);
-
-            if((st.executeUpdate()) == 1) {
-                return 1;    
-            }              
-        }
-        catch(Exception e) {
-            System.out.println("error at adding index");
-            e.printStackTrace();
-        }
-        return -1;
-    }            
-    
-    // updates client with the id and sets the new given data
-    private Integer updateClient(int id, String fname, String lname, String addr, String phone) {                                                   
-        
-        String query = "UPDATE client SET first_name = ?, last_name = ?, address = ?, phone_number = ? WHERE id_client = ? ";
-        
-        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            st.setString(1, fname);
-            st.setString(2, lname);
-            st.setString(3, addr);
-            st.setString(4, phone);
-            st.setInt(5, id);
-            
-            if((st.executeUpdate()) == 1) {
-                return 1;
-            }              
-                
-        }
-        catch(Exception e) {
-            System.out.println("error at updating data");
-            e.printStackTrace();
-        } 
-        return -1;
-    }              
-    
-    // delete client with given id
-    private Integer deleteClient(int id) {                                                           
-        String query = "DELETE FROM client WHERE id_client = ? ";
-        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            st.setInt(1, id);
-        
-            if((st.executeUpdate()) == 1) {  
-                return 1;                     
-            }                             
-        }
-        catch(Exception e) {
-            System.out.println("error at deleting data");
-            e.printStackTrace();
-        }  
-        
-        return -1;
-    }           
-    
-    // inserts new client with given info into the DB
-    private Integer saveClient(String fname, String lname, String addr, String phone) {                                                
-        
-        String query = "INSERT INTO client (first_name, last_name, address, phone_number) VALUES (?, ?, ?, ?);" ;
-        
-        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            st.setString(1, fname);
-            st.setString(2, lname);
-            st.setString(3, addr);
-            st.setString(4, phone);
-            
-            if((st.executeUpdate()) == 1) {  
-                return 1;                
-            }              
-            else {
-                return -1;     
-            }
-        }
-        catch(Exception e) {
-            System.out.println("error at adding data");
-            e.printStackTrace();
-        }
-        return -1;
-    }      
-    
-    
 }

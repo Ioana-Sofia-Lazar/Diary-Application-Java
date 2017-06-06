@@ -16,6 +16,11 @@ public class Entry implements Serializable {
         this.date = date;
     }
 
+    @Override
+    public String toString() {
+        return "Entry{" + "id=" + id + ", title=" + title + ", text=" + text + ", date=" + date + '}';
+    }
+
     public int getId() {
         return id;
     }

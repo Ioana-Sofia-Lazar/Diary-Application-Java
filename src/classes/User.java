@@ -1,7 +1,14 @@
 package classes;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class User implements Serializable {
@@ -10,6 +17,11 @@ public class User implements Serializable {
     private String password;
     private String name;
     private Date birthdate;
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", birthdate=" + birthdate + ", profilePic=" + profilePic + '}';
+    }
     private ImageIcon profilePic;
 
     public void setId(int id) {
@@ -43,6 +55,25 @@ public class User implements Serializable {
         this.name = name;
         this.birthdate = birthdate;
         this.profilePic = profilePic;
+    }
+    
+    public User() {
+        this.id = 0;
+        this.username = "test";
+        this.password = "test";
+        this.name = "name";
+        this.birthdate = Date.valueOf("1996-04-04");
+        
+        try {
+            URL url = new URL("https://www.ravensbourne.ac.uk/content/img/default-pupil-profile.png");
+            ImageIcon icon = new ImageIcon(ImageIO.read(url));
+            this.profilePic = icon;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     public int getId() {
