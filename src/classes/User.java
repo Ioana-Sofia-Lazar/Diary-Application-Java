@@ -17,12 +17,13 @@ public class User implements Serializable {
     private String password;
     private String name;
     private Date birthdate;
+    private ImageIcon profilePic;
 
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", birthdate=" + birthdate + ", profilePic=" + profilePic + '}';
     }
-    private ImageIcon profilePic;
+ 
 
     public void setId(int id) {
         this.id = id;

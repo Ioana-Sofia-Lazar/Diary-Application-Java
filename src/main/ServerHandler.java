@@ -17,10 +17,13 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import packets.closeAppPacket;
 import packets.deleteAccountPacket;
 import packets.loginPacket;
 import packets.loginResponsePacket;
@@ -72,6 +75,12 @@ public class ServerHandler extends Thread{
                     out.writeObject(handlerResponse);
                     out.flush();
                 }
+                if(message instanceof closeAppPacket) {
+                    closeAppPacket msg = (closeAppPacket) message;
+                    closeAppHandler(msg.getENTRIES(), msg.getUSER(), msg.getSETTINGS());
+                    //out.writeObject(handlerResponse);
+                    //out.flush();
+                }
             }
         } catch (IOException e) {
             System.out.println("Unexpected error on user input/output streams");
@@ -95,6 +104,72 @@ public class ServerHandler extends Thread{
                 System.out.println("Failed to close socket");
             }
         }
+    }
+    
+    private void updateUser(User user) {
+        int id = user.getId();
+        String query = "UPDATE user(password, name, birthdate, profile_pic) VALUES(?, ?, ?, ?) FROM user WHERE id_user = ? ";
+        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+            
+            //TODO sa salvez poza de profil
+            //FileInputStream fin = new FileInputStream(user.getProfilePic());
+            
+            st.setString(1, user.getPassword());
+            st.setString(2, user.getName());
+            st.setDate(3, user.getBirthdate());
+            //st.setBinaryStream(4, (InputStream)fin, (int)imgfile.length());
+            st.setInt(5, id);
+        
+            if((st.executeUpdate()) != 1) {  
+                                    
+            }                             
+        }
+        catch(Exception e) {
+            System.out.println("error at deleting user");
+            e.printStackTrace();
+        }  
+        
+    }
+    
+    private void updateSettings(Settings settings) {
+        int id = settings.getId();
+        String query = "UPDATE settings(theme) VALUES(?) FROM user WHERE id_setting = ? ";
+        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+            st.setInt(1, id);
+                         
+        }
+        catch(Exception e) {
+            System.out.println("error at deleting user");
+            e.printStackTrace();
+        }  
+    }
+    
+    private void updateEntries(HashMap<Date, ArrayList<Entry>> entries) {
+        Iterator it = entries.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            ArrayList<Entry> en = (ArrayList<Entry>) pair.getValue();
+            
+            for(Entry e : en) {
+                
+            }
+            
+            String query = "UPDATE settings(theme) VALUES(?) FROM user WHERE id_setting = ? ";
+        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+            st.setInt(1, id);
+                         
+        }
+        catch(Exception e) {
+            System.out.println("error at deleting user");
+            e.printStackTrace();
+        }  
+        }
+        
+    }
+    
+    private void closeAppHandler(HashMap<Date, ArrayList<Entry>> entries, User user, Settings settings) {
+        updateUser(user);
+        updateSettings(settings);
     }
     
     private int deleteUser(int id) {
@@ -273,7 +348,7 @@ public class ServerHandler extends Thread{
         loginResponsePacket handlerResponse = new loginResponsePacket(null, null, null);
         User user = validateLogin(username, password);    
         Settings s;
-        HashMap<Integer, Entry> entries = new HashMap<>();
+        HashMap<Date, ArrayList<Entry>> entries = new HashMap<>();
                 
         if(user != null) { // retrieve all data for this user
             s = getSettings(user.getId());
@@ -284,17 +359,30 @@ public class ServerHandler extends Thread{
         return handlerResponse;
     }
     
-    private HashMap<Integer, Entry> getEntries(int id) {
-        HashMap<Integer, Entry> entr = new HashMap<>();
+    private HashMap<Date, ArrayList<Entry>> getEntries(int id) {
+        HashMap<Date, ArrayList<Entry>> entr = new HashMap<>();
         
         String query = "SELECT * FROM entry WHERE id_user = ?;";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             while(rs.next()) {
+                // get image
+                byte[] image = rs.getBytes("image");
+                ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(image));
+                
                 Entry e = new Entry(rs.getInt("id_entry"), rs.getString("title"), rs.getString("text"),
-                    rs.getDate("date"));
-                entr.put(e.getId(), e);
+                    rs.getDate("date"), rs.getTime("time"), icon, rs.getString("location"), true);
+                if(entr.get(e.getDate()) != null) { // the date already exists in the hashmap
+                    ArrayList<Entry> en = entr.get(e.getDate());
+                    en.add(e);
+                    entr.put(e.getDate(), en);
+                }
+                else {
+                    ArrayList<Entry> en = new ArrayList<>();
+                    en.add(e);
+                    entr.put(e.getDate(), en);
+                }
             } 
         }
         catch(Exception e) {

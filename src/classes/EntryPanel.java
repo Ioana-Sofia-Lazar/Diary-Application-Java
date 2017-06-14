@@ -1,25 +1,58 @@
 package classes;
 
-
 import classes.Entry;
+import java.awt.Dimension;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author ioana
- */
 public class EntryPanel extends javax.swing.JPanel {
 
     private Entry entry;
+    EntryPanel me;
     
-    public EntryPanel() {
+    public EntryPanel(Entry entry) {
         this.entry = entry;
         initComponents();
+    }
+
+    public JButton getDeleteEntryButton() {
+        return deleteEntryButton;
+    }
+    
+    public ImageIcon scaleImage(ImageIcon icon, int w, int h) {
+        int nw = icon.getIconWidth();
+        int nh = icon.getIconHeight();
+
+        if(icon.getIconWidth() > w) {
+          nw = w;
+          nh = (nw * icon.getIconHeight()) / icon.getIconWidth();
+        }
+
+        if(nh > h) {
+          nh = h;
+          nw = (icon.getIconWidth() * nh) / icon.getIconHeight();
+        }
+
+        return new ImageIcon(icon.getImage().getScaledInstance(nw, nh, Image.SCALE_DEFAULT));
+    }
+    
+    
+    public void loadData(){
+        entryTitleLabel.setText(entry.getTitle());
+        entryTextArea.setText(entry.getText());
+        entryLocationLabel.setText(entry.getLocation());
+        entryTimeLabel.setText(entry.getTime().toString());
+        
+        if(entry.getPic() != null) {
+            int width = 240;
+            int height = 150;
+            entryImageLabel.setPreferredSize(new Dimension(width, height));
+            entryImageLabel.setIcon(scaleImage(entry.getPic(), width, height));
+            this.revalidate();
+            this.repaint();
+            
+        }
     }
 
     /**
@@ -39,7 +72,13 @@ public class EntryPanel extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         editEntryButton = new javax.swing.JButton();
         deleteEntryButton = new javax.swing.JButton();
+        entryLocationLabel = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 51, 51));
+        setMaximumSize(new java.awt.Dimension(646, 290));
+        setMinimumSize(new java.awt.Dimension(646, 290));
+
+        entryTextArea.setEditable(false);
         entryTextArea.setColumns(20);
         entryTextArea.setLineWrap(true);
         entryTextArea.setRows(5);
@@ -51,8 +90,20 @@ public class EntryPanel extends javax.swing.JPanel {
         entryTimeLabel.setText("Time here");
 
         editEntryButton.setText("...");
+        editEntryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editEntryButtonActionPerformed(evt);
+            }
+        });
 
         deleteEntryButton.setText("X");
+        deleteEntryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteEntryButtonActionPerformed(evt);
+            }
+        });
+
+        entryLocationLabel.setText("Location here");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,16 +115,18 @@ public class EntryPanel extends javax.swing.JPanel {
                     .addComponent(jScrollPane1)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(entryImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(entryTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(entryTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addComponent(editEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteEntryButton)))
+                        .addComponent(deleteEntryButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(entryTimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
+                                .addComponent(entryLocationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(entryImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -92,18 +145,32 @@ public class EntryPanel extends javax.swing.JPanel {
                 .addGap(13, 13, 13)
                 .addComponent(entryTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(entryLocationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(entryImageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(entryImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void deleteEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteEntryButtonActionPerformed
+        me = this;
+        me.getParent().remove(me);
+        me.getParent().revalidate();
+        me.getParent().repaint();
+    }//GEN-LAST:event_deleteEntryButtonActionPerformed
+
+    private void editEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEntryButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editEntryButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteEntryButton;
     private javax.swing.JButton editEntryButton;
     private javax.swing.JLabel entryImageLabel;
+    private javax.swing.JLabel entryLocationLabel;
     private javax.swing.JTextArea entryTextArea;
     private javax.swing.JLabel entryTimeLabel;
     private javax.swing.JLabel entryTitleLabel;
