@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -25,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +60,7 @@ public class ClientS extends javax.swing.JFrame {
         initComponents();   
         dialogBox.setVisible(true);
         jDateChooser2.setDate(Calendar.getInstance().getTime());
+        appearancePageLoad();
     }
     
     public boolean connectToServer(){
@@ -170,6 +174,14 @@ public class ClientS extends javax.swing.JFrame {
         eraseAllDataButton = new javax.swing.JButton();
         deleteAccountButton = new javax.swing.JButton();
         appearancePanel = new javax.swing.JPanel();
+        theme0Label = new javax.swing.JLabel();
+        theme1Label = new javax.swing.JLabel();
+        theme3Label = new javax.swing.JLabel();
+        theme2Label = new javax.swing.JLabel();
+        theme0Button = new javax.swing.JButton();
+        theme1Button = new javax.swing.JButton();
+        theme2Button = new javax.swing.JButton();
+        theme3Button = new javax.swing.JButton();
         calendarPanel = new javax.swing.JPanel();
         calendarContainerPanel = new javax.swing.JPanel();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
@@ -186,6 +198,11 @@ public class ClientS extends javax.swing.JFrame {
         dialogBox.setPreferredSize(new java.awt.Dimension(329, 411));
         dialogBox.setResizable(false);
         dialogBox.setSize(new java.awt.Dimension(329, 490));
+        dialogBox.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                dialogBoxComponentShown(evt);
+            }
+        });
         dialogBox.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowDeactivated(java.awt.event.WindowEvent evt) {
                 dialogBoxWindowDeactivated(evt);
@@ -1005,8 +1022,85 @@ public class ClientS extends javax.swing.JFrame {
 
         ContentPanel.add(settingsPanel, "card2");
 
-        appearancePanel.setBackground(new java.awt.Color(0, 0, 204));
-        appearancePanel.setLayout(new java.awt.GridBagLayout());
+        appearancePanel.setBackground(new java.awt.Color(153, 255, 153));
+
+        theme0Button.setText("Apply");
+        theme0Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                theme0ButtonActionPerformed(evt);
+            }
+        });
+
+        theme1Button.setText("Apply");
+        theme1Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                theme1ButtonActionPerformed(evt);
+            }
+        });
+
+        theme2Button.setText("Apply");
+        theme2Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                theme2ButtonActionPerformed(evt);
+            }
+        });
+
+        theme3Button.setText("Apply");
+        theme3Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                theme3ButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout appearancePanelLayout = new javax.swing.GroupLayout(appearancePanel);
+        appearancePanel.setLayout(appearancePanelLayout);
+        appearancePanelLayout.setHorizontalGroup(
+            appearancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(appearancePanelLayout.createSequentialGroup()
+                .addGap(144, 144, 144)
+                .addComponent(theme0Button)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(theme1Button)
+                .addGap(178, 178, 178))
+            .addGroup(appearancePanelLayout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addGroup(appearancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(theme0Label, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(theme2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addGroup(appearancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(theme1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(theme3Label, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(82, Short.MAX_VALUE))
+            .addGroup(appearancePanelLayout.createSequentialGroup()
+                .addGap(146, 146, 146)
+                .addComponent(theme2Button)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(theme3Button)
+                .addGap(176, 176, 176))
+        );
+        appearancePanelLayout.setVerticalGroup(
+            appearancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(appearancePanelLayout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(appearancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(theme1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(theme0Label, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(appearancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(theme0Button)
+                    .addComponent(theme1Button))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(appearancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(theme3Label, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(theme2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(appearancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(theme2Button)
+                    .addComponent(theme3Button))
+                .addGap(65, 65, 65))
+        );
+
         ContentPanel.add(appearancePanel, "card2");
 
         calendarPanel.setBackground(new java.awt.Color(153, 102, 255));
@@ -1082,6 +1176,24 @@ public class ClientS extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void appearancePageLoad() {
+        int width = theme0Label.getWidth();
+        int height = theme0Label.getHeight();
+        ImageIcon icon;
+        
+        icon = new ImageIcon("theme.jpg");
+        theme0Label.setIcon(scaleImage(icon, width, height));
+        
+        icon = new ImageIcon("theme.jpg");
+        theme1Label.setIcon(scaleImage(icon, width, height));
+        
+        icon = new ImageIcon("theme.jpg");
+        theme2Label.setIcon(scaleImage(icon, width, height));
+        
+        icon = new ImageIcon("theme.jpg");
+        theme3Label.setIcon(scaleImage(icon, width, height));
+    }
+    
     private void changeCard(String card) {
         ContentPanel.removeAll();
         switch(card){
@@ -1116,6 +1228,7 @@ public class ClientS extends javax.swing.JFrame {
 
     private void calendarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calendarButtonActionPerformed
         changeCard("calendar");
+        addEntriesForDate(selectedDate);
     }//GEN-LAST:event_calendarButtonActionPerformed
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
@@ -1134,10 +1247,20 @@ public class ClientS extends javax.swing.JFrame {
         // TODO colors for each theme
         Color c1, c2;
         switch(nr) {
-            case 0: c1 = Color.decode("#ffffff");
+            case 1: c1 = Color.decode("#f22222");
+                    c2 = Color.decode("#444444");
+                    break;                   
+            case 2: c1 = Color.decode("#ffffff");
+                    c2 = Color.decode("#244242");
+                    break;  
+                    
+            default: c1 = Color.decode("#f22222");
+                     c2 = Color.decode("#444444");
+                     break;
         }
         
         // TODO change components colors
+        appearancePanel.setBackground(c1);
     }
     
     private void loadProfile() {
@@ -1165,6 +1288,7 @@ public class ClientS extends javax.swing.JFrame {
     private void loadAll() {
         loadProfile();
         loadSettings();
+        
     }
     
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
@@ -1186,6 +1310,7 @@ public class ClientS extends javax.swing.JFrame {
                 System.out.println(USER + "\n" + SETTINGS + "\n" + ENTRIES);
                 
                 dialogBox.setVisible(false);
+                this.setVisible(true);
                 
                 loadAll();              
             }            
@@ -1228,6 +1353,8 @@ public class ClientS extends javax.swing.JFrame {
             
             if(msg == 1) {
                 JOptionPane.showMessageDialog(null, "User successfully created!");
+                loginUsernameField.setText("");
+                loginPasswordField.setText("");
                 changeCardDialog("login");
                 signupUsernameField.setText("");
                 signupPasswordField.setText("");
@@ -1290,7 +1417,7 @@ public class ClientS extends javax.swing.JFrame {
                 
                 profilePicLabel.setIcon(profilePic);
                 profilePicLabel.setHorizontalTextPosition(JLabel.CENTER);
-                USER.setProfilePic(profilePic);
+                USER.setProfilePic(profilePic);System.out.println(profilePic);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1377,6 +1504,10 @@ public class ClientS extends javax.swing.JFrame {
             int response = (int) ois.readObject();
             if(response == 1) {
                 JOptionPane.showMessageDialog(null, "Account successfully deleted.");
+                deleteAccountDialog.dispose();   
+                this.dispose();
+                dialogBox.setVisible(true);
+                loggedIn = false;
             }
             else {
                 JOptionPane.showMessageDialog(null, "Error at deleting account.");
@@ -1402,7 +1533,24 @@ public class ClientS extends javax.swing.JFrame {
         
         // password is correct so we reset data to defaults data 
         eraseEverythingErrorLabel.setText("");
-        ENTRIES = new HashMap<>();
+        // set all entries removed
+        Iterator it = ENTRIES.entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            ArrayList<Entry> entries = (ArrayList<Entry>) pair.getValue();
+            Iterator<Entry> iter = entries.iterator();
+
+            while (iter.hasNext()) {
+                Entry e = iter.next();
+
+                if(e.getId() <= 0) {
+                    iter.remove();
+                } 
+                else {
+                    e.setRemoved(true);
+                }
+            }
+        }
         
         JOptionPane.showMessageDialog(null, "All entries were successfully deleted.");
         eraseEverythingDialog.dispose();
@@ -1434,7 +1582,7 @@ public class ClientS extends javax.swing.JFrame {
     }//GEN-LAST:event_newEntryAddPhotoButtonActionPerformed
 
     private void addEntriesForDate(Date date) {
-        timelineContainerPanel.removeAll();System.out.println("!" + ENTRIES);
+        timelineContainerPanel.removeAll();
         revalidate();
         repaint();
         if(ENTRIES.get(date) != null) { 
@@ -1448,6 +1596,7 @@ public class ClientS extends javax.swing.JFrame {
                     panel.loadData();
                     panel.setVisible(true);
                     timelineContainerPanel.add(panel);
+                    timelineContainerPanel.add(Box.createRigidArea(new Dimension(500, 30))); // space after each entry panel 
                     revalidate();
                     repaint();  
                 }                    
@@ -1534,22 +1683,19 @@ public class ClientS extends javax.swing.JFrame {
                 }
                 if(delPhoto)
                     e.setPic(null);
+                e.setAdded(false);
             }
         }
         Collections.sort(entries, (a,b) -> a.getTime().compareTo(b.getTime())); 
-        ENTRIES.put(selectedDate, entries);System.out.println(ENTRIES);
+        ENTRIES.put(selectedDate, entries);
         
         addEntriesForDate(selectedDate);
         addEntryDialog.dispose();
     }//GEN-LAST:event_saveModficationsButtonActionPerformed
 
     private void jDateChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser2PropertyChange
-        if(jDateChooser2.getDate() != null) {
-            System.out.println(ENTRIES);
-            
+        if(jDateChooser2.getDate() != null) {            
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            System.out.println(ENTRIES.get(Date.valueOf("2017-06-14")));
-            //System.out.println(ENTRIES.get(dateFormat.format(Date.valueOf("2017-06-14"))));
             String date = dateFormat.format(new Date(jDateChooser2.getDate().getTime()));
             Date d = Date.valueOf(date);
             addEntriesForDate(d);
@@ -1571,6 +1717,34 @@ public class ClientS extends javax.swing.JFrame {
             Logger.getLogger(ClientS.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void theme0ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_theme0ButtonActionPerformed
+        SETTINGS.setTheme(0);
+        applyTheme(0);
+    }//GEN-LAST:event_theme0ButtonActionPerformed
+
+    private void theme1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_theme1ButtonActionPerformed
+        SETTINGS.setTheme(1);
+        applyTheme(1);
+    }//GEN-LAST:event_theme1ButtonActionPerformed
+
+    private void theme2ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_theme2ButtonActionPerformed
+        SETTINGS.setTheme(2);
+        applyTheme(2);
+    }//GEN-LAST:event_theme2ButtonActionPerformed
+
+    private void theme3ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_theme3ButtonActionPerformed
+        SETTINGS.setTheme(3);
+        applyTheme(3);
+    }//GEN-LAST:event_theme3ButtonActionPerformed
+
+    private void dialogBoxComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dialogBoxComponentShown
+        loginUsernameField.setText("");
+        loginPasswordField.setText("");
+        signupUsernameField.setText("");
+        signupPasswordField.setText("");
+        confirmSignupPasswordField.setText("");
+    }//GEN-LAST:event_dialogBoxComponentShown
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -1613,6 +1787,203 @@ public class ClientS extends javax.swing.JFrame {
         newEntryMinSpinner.setValue(m);
         newEntryTextArea.setText(text);
         newEntryPhotoPathLabel.setText(path);
+    }
+    
+    // ======================================================
+    private int editingEntryId = 0;
+    private class EntryPanel extends javax.swing.JPanel {
+
+        private Entry entry;
+
+        public EntryPanel(Entry entry) {
+            this.entry = entry;
+            initComponents();
+        }
+
+        public JButton getDeleteEntryButton() {
+            return deleteEntryButton;
+        }
+
+        public ImageIcon scaleImage(ImageIcon icon, int w, int h) {
+            int nw = icon.getIconWidth();
+            int nh = icon.getIconHeight();
+
+            if(icon.getIconWidth() > w) {
+              nw = w;
+              nh = (nw * icon.getIconHeight()) / icon.getIconWidth();
+            }
+
+            if(nh > h) {
+              nh = h;
+              nw = (icon.getIconWidth() * nh) / icon.getIconHeight();
+            }
+
+            return new ImageIcon(icon.getImage().getScaledInstance(nw, nh, Image.SCALE_DEFAULT));
+        }
+
+        public void loadData(){
+            entryTitleLabel.setText(entry.getTitle());
+            entryTextArea.setText(entry.getText());
+            entryLocationLabel.setText(entry.getLocation());
+            entryTimeLabel.setText(entry.getTime().toString());
+
+            if(entry.getPic() != null) {
+                int width = 240;
+                int height = 150;
+                entryImageLabel.setPreferredSize(new Dimension(width, height));
+                
+                
+                entryImageLabel.setIcon(scaleImage(entry.getPic(), width, height));
+                this.setPreferredSize(new Dimension(width, 500));
+                
+                this.validate();
+            }
+        }
+
+        /**
+         * This method is called from within the constructor to initialize the form.
+         * WARNING: Do NOT modify this code. The content of this method is always
+         * regenerated by the Form Editor.
+         */
+        @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        entryTextArea = new javax.swing.JTextArea();
+        entryTitleLabel = new javax.swing.JLabel();
+        entryTimeLabel = new javax.swing.JLabel();
+        entryImageLabel = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        editEntryButton = new javax.swing.JButton();
+        deleteEntryButton = new javax.swing.JButton();
+        entryLocationLabel = new javax.swing.JLabel();
+
+        setBackground(new java.awt.Color(255, 51, 51));
+        setMaximumSize(new java.awt.Dimension(646, 455));
+        setMinimumSize(new java.awt.Dimension(646, 290));
+        setPreferredSize(new java.awt.Dimension(646, 290));
+
+        entryTextArea.setEditable(false);
+        entryTextArea.setColumns(20);
+        entryTextArea.setLineWrap(true);
+        entryTextArea.setRows(5);
+        entryTextArea.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(entryTextArea);
+
+        entryTitleLabel.setText("Title here");
+
+        entryTimeLabel.setText("Time here");
+
+        editEntryButton.setText("...");
+        editEntryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editEntryButtonActionPerformed(evt);
+            }
+        });
+
+        deleteEntryButton.setText("X");
+        deleteEntryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteEntryButtonActionPerformed(evt);
+            }
+        });
+
+        entryLocationLabel.setText("Location here");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(entryTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addComponent(editEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteEntryButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(entryTimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
+                                .addComponent(entryLocationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(entryImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(entryTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(editEntryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                        .addComponent(deleteEntryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(entryTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(entryLocationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(entryImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16))
+        );
+    }// </editor-fold>                          
+
+        private void deleteEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+            this.setVisible(false);
+            int id = this.getEntry().getId();
+            ArrayList<Entry> entries = ENTRIES.get(selectedDate);
+            Iterator<Entry> iter = entries.iterator();
+
+            while (iter.hasNext()) {
+                Entry e = iter.next();
+                if(e.getId() == id) {                                        
+                    e.setRemoved(true);
+                    if(e.getId() <= 0)
+                        iter.remove();
+                } 
+            }
+
+            Collections.sort(entries, (a,b) -> a.getTime().compareTo(b.getTime())); 
+            ENTRIES.put(selectedDate, entries);
+            addEntriesForDate(selectedDate);
+        }  
+                
+        private void editEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {
+            saveModficationsButton.setVisible(true);
+            saveNewEntryButton.setVisible(false);
+            editingEntryId = entry.getId();            
+            setAddEntryFields(entry.getTitle(), entry.getLocation(), entry.getTime().getHours(), entry.getTime().getMinutes(), entry.getText(), "");
+            deletePhotoCheckbox.setVisible(true);
+            addEntryDialog.setVisible(true);
+        }  
+
+        public Entry getEntry() {
+            return this.entry;
+        }
+
+        // Variables declaration - do not modify                     
+        private javax.swing.JButton deleteEntryButton;
+        private javax.swing.JButton editEntryButton;
+        private javax.swing.JLabel entryImageLabel;
+        private javax.swing.JLabel entryLocationLabel;
+        private javax.swing.JTextArea entryTextArea;
+        private javax.swing.JLabel entryTimeLabel;
+        private javax.swing.JLabel entryTitleLabel;
+        private javax.swing.JScrollPane jScrollPane1;
+        private javax.swing.JSeparator jSeparator1;
+        // End of variables declaration                   
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1714,199 +2085,16 @@ public class ClientS extends javax.swing.JFrame {
     private javax.swing.JTextField signupUsernameField;
     private javax.swing.JButton switchToLoginButton;
     private javax.swing.JButton switchToSignupButton;
+    private javax.swing.JButton theme0Button;
+    private javax.swing.JLabel theme0Label;
+    private javax.swing.JButton theme1Button;
+    private javax.swing.JLabel theme1Label;
+    private javax.swing.JButton theme2Button;
+    private javax.swing.JLabel theme2Label;
+    private javax.swing.JButton theme3Button;
+    private javax.swing.JLabel theme3Label;
     private javax.swing.JPanel timelineContainerPanel;
     private javax.swing.JPanel timelinePanel;
     // End of variables declaration//GEN-END:variables
-    
-    private int editingEntryId = 0;
-    private class EntryPanel extends javax.swing.JPanel {
-
-        private Entry entry;
-
-        public EntryPanel(Entry entry) {
-            this.entry = entry;
-            initComponents();
-        }
-
-        public JButton getDeleteEntryButton() {
-            return deleteEntryButton;
-        }
-
-        public ImageIcon scaleImage(ImageIcon icon, int w, int h) {
-            int nw = icon.getIconWidth();
-            int nh = icon.getIconHeight();
-
-            if(icon.getIconWidth() > w) {
-              nw = w;
-              nh = (nw * icon.getIconHeight()) / icon.getIconWidth();
-            }
-
-            if(nh > h) {
-              nh = h;
-              nw = (icon.getIconWidth() * nh) / icon.getIconHeight();
-            }
-
-            return new ImageIcon(icon.getImage().getScaledInstance(nw, nh, Image.SCALE_DEFAULT));
-        }
-
-
-        public void loadData(){
-            entryTitleLabel.setText(entry.getTitle());
-            entryTextArea.setText(entry.getText());
-            entryLocationLabel.setText(entry.getLocation());
-            entryTimeLabel.setText(entry.getTime().toString());
-
-            if(entry.getPic() != null) {
-                int width = 240;
-                int height = 150;
-                entryImageLabel.setPreferredSize(new Dimension(width, height));
-                entryImageLabel.setIcon(scaleImage(entry.getPic(), width, height));
-                
-                this.revalidate();
-                this.repaint();
-            }
-        }
-
-        /**
-         * This method is called from within the constructor to initialize the form.
-         * WARNING: Do NOT modify this code. The content of this method is always
-         * regenerated by the Form Editor.
-         */
-        @SuppressWarnings("unchecked")
-        // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-        private void initComponents() {
-
-            jScrollPane1 = new javax.swing.JScrollPane();
-            entryTextArea = new javax.swing.JTextArea();
-            entryTitleLabel = new javax.swing.JLabel();
-            entryTimeLabel = new javax.swing.JLabel();
-            entryImageLabel = new javax.swing.JLabel();
-            jSeparator1 = new javax.swing.JSeparator();
-            editEntryButton = new javax.swing.JButton();
-            deleteEntryButton = new javax.swing.JButton();
-            entryLocationLabel = new javax.swing.JLabel();
-
-            setBackground(new java.awt.Color(255, 51, 51));
-            setMaximumSize(new java.awt.Dimension(646, 290));
-            setMinimumSize(new java.awt.Dimension(646, 290));
-
-            entryTextArea.setEditable(false);
-            entryTextArea.setColumns(20);
-            entryTextArea.setLineWrap(true);
-            entryTextArea.setRows(5);
-            entryTextArea.setWrapStyleWord(true);
-            jScrollPane1.setViewportView(entryTextArea);
-
-            entryTitleLabel.setText("Title here");
-
-            entryTimeLabel.setText("Time here");
-
-            editEntryButton.setText("...");
-
-            deleteEntryButton.setText("X");
-            deleteEntryButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    deleteEntryButtonActionPerformed(evt);
-                }
-            });
-            editEntryButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    editEntryButtonActionPerformed(evt);
-                }
-            });
-
-            entryLocationLabel.setText("Location here");
-
-            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-            this.setLayout(layout);
-            layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(entryTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                            .addComponent(editEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(deleteEntryButton))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(entryTimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
-                                    .addComponent(entryLocationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(entryImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(0, 0, Short.MAX_VALUE)))
-                    .addContainerGap())
-            );
-            layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(0, 0, Short.MAX_VALUE)
-                            .addComponent(entryTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(editEntryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                            .addComponent(deleteEntryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(13, 13, 13)
-                    .addComponent(entryTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(entryLocationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(entryImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
-            );
-        }// </editor-fold>                        
-
-        private void deleteEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-            this.setVisible(false);
-            int id = this.getEntry().getId();
-            ArrayList<Entry> entries = ENTRIES.get(selectedDate);
-            for(Entry e : entries) {
-                if(e.getId() == id) {                                        
-                    e.setRemoved(true);
-                    if(e.getId() <= 0)
-                        entries.remove(e);
-                }                    
-            }
-            Collections.sort(entries, (a,b) -> a.getTime().compareTo(b.getTime())); 
-            ENTRIES.put(selectedDate, entries);System.out.println(ENTRIES);
-            addEntriesForDate(selectedDate);
-        }  
-        
-        
-        private void editEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {
-            saveModficationsButton.setVisible(true);
-            saveNewEntryButton.setVisible(false);
-            editingEntryId = entry.getId();            
-            setAddEntryFields(entry.getTitle(), entry.getLocation(), entry.getTime().getHours(), entry.getTime().getMinutes(), entry.getText(), "");
-            deletePhotoCheckbox.setVisible(true);
-            addEntryDialog.setVisible(true);
-        }  
-
-        public Entry getEntry() {
-            return this.entry;
-        }
-
-        // Variables declaration - do not modify                     
-        private javax.swing.JButton deleteEntryButton;
-        private javax.swing.JButton editEntryButton;
-        private javax.swing.JLabel entryImageLabel;
-        private javax.swing.JLabel entryLocationLabel;
-        private javax.swing.JTextArea entryTextArea;
-        private javax.swing.JLabel entryTimeLabel;
-        private javax.swing.JLabel entryTitleLabel;
-        private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JSeparator jSeparator1;
-        // End of variables declaration                   
-    }
 
 }

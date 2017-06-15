@@ -3,8 +3,12 @@ package main;
 import classes.Entry;
 import classes.Settings;
 import classes.User;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -77,9 +81,7 @@ public class ServerHandler extends Thread{
                 }
                 if(message instanceof closeAppPacket) {
                     closeAppPacket msg = (closeAppPacket) message;
-                    closeAppHandler(msg.getENTRIES(), msg.getUSER(), msg.getSETTINGS());
-                    //out.writeObject(handlerResponse);
-                    //out.flush();
+                    closeAppHandler(msg.getENTRIES(), msg.getUSER(), msg.getSETTINGS());                    
                 }
             }
         } catch (IOException e) {
@@ -108,16 +110,23 @@ public class ServerHandler extends Thread{
     
     private void updateUser(User user) {
         int id = user.getId();
-        String query = "UPDATE user(password, name, birthdate, profile_pic) VALUES(?, ?, ?, ?) FROM user WHERE id_user = ? ";
+        String query = "UPDATE user SET password = ?, name = ?, birthdate = ?, profile_pic = ? WHERE id_user = ? ";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            
-            //TODO sa salvez poza de profil
-            //FileInputStream fin = new FileInputStream(user.getProfilePic());
+            // prepare the photo
+            Image image = user.getProfilePic().getImage();
+            BufferedImage bImage = new BufferedImage(image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_RGB);
+            Graphics bg = bImage.getGraphics();
+            bg.drawImage(image,0,0,null);
+            bg.dispose();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "jpeg", out);
+            byte[] buf = out.toByteArray();
+            ByteArrayInputStream inStream = new ByteArrayInputStream(buf);            
             
             st.setString(1, user.getPassword());
             st.setString(2, user.getName());
             st.setDate(3, user.getBirthdate());
-            //st.setBinaryStream(4, (InputStream)fin, (int)imgfile.length());
+            st.setBinaryStream(4,inStream,inStream.available());
             st.setInt(5, id);
         
             if((st.executeUpdate()) != 1) {  
@@ -125,7 +134,7 @@ public class ServerHandler extends Thread{
             }                             
         }
         catch(Exception e) {
-            System.out.println("error at deleting user");
+            System.out.println("error at updating user");
             e.printStackTrace();
         }  
         
@@ -144,25 +153,89 @@ public class ServerHandler extends Thread{
         }  
     }
     
-    private void updateEntries(HashMap<Date, ArrayList<Entry>> entries) {
+    private void updateEntries(int id, HashMap<Date, ArrayList<Entry>> entries) {
         Iterator it = entries.entrySet().iterator();
-        while (it.hasNext()) {
+        while(it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             ArrayList<Entry> en = (ArrayList<Entry>) pair.getValue();
-            
-            for(Entry e : en) {
-                
+            ByteArrayInputStream inStream = null; 
+            for(Entry e : en) {System.out.println("id " + id + " removed " + e.isRemoved() + " added " + e.isAdded());
+                // prepare the photo
+                if(e.getPic() != null) {
+                    try {
+                        Image image = e.getPic().getImage();
+                        BufferedImage bImage = new BufferedImage(image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_RGB);
+                        Graphics bg = bImage.getGraphics();
+                        bg.drawImage(image,0,0,null);
+                        bg.dispose();
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        ImageIO.write(bImage, "jpeg", out);
+                        byte[] buf = out.toByteArray();
+                        inStream = new ByteArrayInputStream(buf); 
+                    } catch (IOException ex) {
+                        Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                                              
+                if(e.isAdded() && e.isRemoved()) { // entry was in DB and was removed by user
+                    String query = "DELETE FROM entry WHERE id_user = ? AND id_entry = ?";
+                    try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+                        st.setInt(1, id);
+                        st.setInt(2, e.getId());
+                        st.executeUpdate();
+                    }
+                    catch(Exception ex) {
+                        System.out.println("error at deleting entry");
+                        ex.printStackTrace();
+                    }  
+                }
+                if(!e.isAdded() && e.getId() < 0) { // entry was not in the DB
+                    System.err.println("inserting");
+                    String query = "INSERT INTO entry(id_user, title, text, location, date, time, image) "
+                            + "VALUES(?, ?, ?, ?, ?, ?, ?);";
+                    try(PreparedStatement st = DBConnection.prepareStatement(query);) {
+                        st.setInt(1, id);
+                        st.setString(2, e.getTitle());
+                        st.setString(3, e.getText());
+                        st.setString(4, e.getLocation());
+                        st.setDate(5, e.getDate());
+                        st.setTime(6, e.getTime());
+                        if(inStream != null)
+                            st.setBinaryStream(7,inStream,inStream.available());
+                        else
+                            st.setString(7, null);
+                        
+                        st.executeUpdate();
+                    }
+                    catch(Exception ex) {
+                        System.out.println("error at inserting entry");
+                        ex.printStackTrace();
+                    }  
+                }
+                if(!e.isAdded() && e.getId() > 0) { // entry was in the Db and was modified
+                    String query = "UPDATE entry SET title = ?, text = ?, location = ?, date = ?, time = ?, image = ?" +
+                            "WHERE id_entry = ? ";
+                    try(PreparedStatement st = DBConnection.prepareStatement(query);) {                       
+                        st.setString(1, e.getTitle());
+                        st.setString(2, e.getText());
+                        st.setString(3, e.getLocation());
+                        st.setDate(4,e.getDate());
+                        st.setTime(5, e.getTime());
+                        st.setBinaryStream(6, inStream, inStream.available());
+                        st.setInt(7, e.getId());
+
+                        if((st.executeUpdate()) != 1) {  
+
+                        }                             
+                    }
+                    catch(Exception ex) {
+                        System.out.println("error at updating entry");
+                        ex.printStackTrace();
+                    }  
+        
+                }
             }
-            
-            String query = "UPDATE settings(theme) VALUES(?) FROM user WHERE id_setting = ? ";
-        try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            st.setInt(1, id);
-                         
-        }
-        catch(Exception e) {
-            System.out.println("error at deleting user");
-            e.printStackTrace();
-        }  
+                        
         }
         
     }
@@ -170,6 +243,7 @@ public class ServerHandler extends Thread{
     private void closeAppHandler(HashMap<Date, ArrayList<Entry>> entries, User user, Settings settings) {
         updateUser(user);
         updateSettings(settings);
+        updateEntries(user.getId(), entries);
     }
     
     private int deleteUser(int id) {
@@ -179,6 +253,7 @@ public class ServerHandler extends Thread{
             st.setInt(1, id);
         
             if((st.executeUpdate()) != 1) {  
+                System.err.println("-- deleting user");
                 return -1;                     
             }                             
         }
@@ -192,7 +267,8 @@ public class ServerHandler extends Thread{
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
             st.setInt(1, id);
         
-            if((st.executeUpdate()) != 1) {  
+            if((st.executeUpdate()) != 1) { 
+                System.err.println("-- deleting settings");
                 return -1;                     
             }                             
         }
@@ -206,9 +282,7 @@ public class ServerHandler extends Thread{
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
             st.setInt(1, id);
         
-            if((st.executeUpdate()) != 1) {  
-                return -1;                     
-            }                             
+            st.executeUpdate();                            
         }
         catch(Exception e) {
             System.out.println("error at deleting user entries");
@@ -369,7 +443,9 @@ public class ServerHandler extends Thread{
             while(rs.next()) {
                 // get image
                 byte[] image = rs.getBytes("image");
-                ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(image));
+                ImageIcon icon = null;
+                if(image != null )
+                    icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(image));
                 
                 Entry e = new Entry(rs.getInt("id_entry"), rs.getString("title"), rs.getString("text"),
                     rs.getDate("date"), rs.getTime("time"), icon, rs.getString("location"), true);
@@ -388,7 +464,7 @@ public class ServerHandler extends Thread{
         catch(Exception e) {
             System.out.println("error at getting entries");
             e.printStackTrace();
-        }        
+        }   
         return entr;
     }
 

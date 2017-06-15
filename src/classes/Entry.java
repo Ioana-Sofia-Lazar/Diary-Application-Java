@@ -29,13 +29,16 @@ public class Entry implements Serializable, Comparable<Entry> {
     public boolean isRemoved() {
         return removed;
     }
-     
+    
+    
 
     public Entry(int id, String title, String text, Date date, Time time, ImageIcon pic, String location, boolean added) {
         if(id == 0) {
-            this.id = -idCount;
+            this.id = idCount;
             idCount--;
         }
+        else
+            this.id = id;
         this.title = title;
         this.text = text;
         this.date = date;

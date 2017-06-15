@@ -28,6 +28,7 @@
         </Property>
       </AccessibilityProperties>
       <Events>
+        <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="dialogBoxComponentShown"/>
         <EventHandler event="windowDeactivated" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="dialogBoxWindowDeactivated"/>
       </Events>
 
@@ -1313,7 +1314,7 @@
         <Container class="javax.swing.JPanel" name="appearancePanel">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="cc" green="0" red="0" type="rgb"/>
+              <Color blue="99" green="ff" red="99" type="rgb"/>
             </Property>
           </Properties>
           <Constraints>
@@ -1322,7 +1323,108 @@
             </Constraint>
           </Constraints>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
+                      <Component id="theme0Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="theme1Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="178" pref="178" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="55" pref="55" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="theme0Label" min="-2" pref="240" max="-2" attributes="0"/>
+                          <Component id="theme2Label" min="-2" pref="240" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="theme1Label" min="-2" pref="240" max="-2" attributes="0"/>
+                          <Component id="theme3Label" min="-2" pref="240" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="82" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="146" max="-2" attributes="0"/>
+                      <Component id="theme2Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="theme3Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="176" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="theme1Label" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
+                          <Component id="theme0Label" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="theme0Button" min="-2" max="-2" attributes="0"/>
+                          <Component id="theme1Button" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="theme3Label" min="-2" pref="165" max="-2" attributes="0"/>
+                          <Component id="theme2Label" min="-2" pref="165" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="theme2Button" min="-2" max="-2" attributes="0"/>
+                          <Component id="theme3Button" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="theme0Label">
+            </Component>
+            <Component class="javax.swing.JLabel" name="theme1Label">
+            </Component>
+            <Component class="javax.swing.JLabel" name="theme3Label">
+            </Component>
+            <Component class="javax.swing.JLabel" name="theme2Label">
+            </Component>
+            <Component class="javax.swing.JButton" name="theme0Button">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Apply"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="theme0ButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="theme1Button">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Apply"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="theme1ButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="theme2Button">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Apply"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="theme2ButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="theme3Button">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Apply"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="theme3ButtonActionPerformed"/>
+              </Events>
+            </Component>
+          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="calendarPanel">
           <Properties>
