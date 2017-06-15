@@ -142,10 +142,12 @@ public class ServerHandler extends Thread{
     
     private void updateSettings(Settings settings) {
         int id = settings.getId();
-        String query = "UPDATE settings(theme) VALUES(?) FROM user WHERE id_setting = ? ";
+        String query = "UPDATE settings SET theme = ? WHERE id_setting = ? ";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            st.setInt(1, id);
-                         
+            st.setInt(1, settings.getTheme());
+            st.setInt(2, id);
+
+            st.executeUpdate();
         }
         catch(Exception e) {
             System.out.println("error at deleting user");

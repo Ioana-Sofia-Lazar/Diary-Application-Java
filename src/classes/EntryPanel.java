@@ -74,36 +74,56 @@ public class EntryPanel extends javax.swing.JPanel {
         deleteEntryButton = new javax.swing.JButton();
         entryLocationLabel = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(255, 51, 51));
+        setBackground(new java.awt.Color(44, 61, 81));
         setMaximumSize(new java.awt.Dimension(646, 455));
         setMinimumSize(new java.awt.Dimension(646, 290));
         setPreferredSize(new java.awt.Dimension(646, 290));
 
         entryTextArea.setEditable(false);
+        entryTextArea.setBackground(new java.awt.Color(232, 224, 213));
         entryTextArea.setColumns(20);
+        entryTextArea.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        entryTextArea.setForeground(new java.awt.Color(44, 61, 81));
         entryTextArea.setLineWrap(true);
         entryTextArea.setRows(5);
+        entryTextArea.setText("amdbba da;lmd/lnk\nd\nd\na\nd\na");
         entryTextArea.setWrapStyleWord(true);
+        entryTextArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        entryTextArea.setMargin(new java.awt.Insets(1, 1, 1, 1));
         jScrollPane1.setViewportView(entryTextArea);
 
+        entryTitleLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        entryTitleLabel.setForeground(new java.awt.Color(181, 196, 201));
         entryTitleLabel.setText("Title here");
 
+        entryTimeLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        entryTimeLabel.setForeground(new java.awt.Color(181, 196, 201));
         entryTimeLabel.setText("Time here");
 
+        jSeparator1.setForeground(new java.awt.Color(232, 224, 213));
+
+        editEntryButton.setBackground(new java.awt.Color(181, 196, 201));
+        editEntryButton.setForeground(new java.awt.Color(44, 61, 81));
         editEntryButton.setText("...");
+        editEntryButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         editEntryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editEntryButtonActionPerformed(evt);
             }
         });
 
+        deleteEntryButton.setBackground(new java.awt.Color(181, 196, 201));
+        deleteEntryButton.setForeground(new java.awt.Color(44, 61, 81));
         deleteEntryButton.setText("X");
+        deleteEntryButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         deleteEntryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteEntryButtonActionPerformed(evt);
             }
         });
 
+        entryLocationLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        entryLocationLabel.setForeground(new java.awt.Color(181, 196, 201));
         entryLocationLabel.setText("Location here");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -117,10 +137,10 @@ public class EntryPanel extends javax.swing.JPanel {
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(entryTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                         .addComponent(editEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteEntryButton))
+                        .addComponent(deleteEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -141,8 +161,8 @@ public class EntryPanel extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(editEntryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
                         .addComponent(deleteEntryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
                 .addComponent(entryTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
