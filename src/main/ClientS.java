@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.*;
@@ -1308,9 +1309,7 @@ public class ClientS extends javax.swing.JFrame {
                 SETTINGS = message.getSettings();
                 
                 System.out.println(USER + "\n" + SETTINGS + "\n" + ENTRIES);
-                
-                dialogBox.setVisible(false);
-                this.setVisible(true);
+                dialogBox.dispose();
                 
                 loadAll();              
             }            
@@ -1503,10 +1502,10 @@ public class ClientS extends javax.swing.JFrame {
             
             int response = (int) ois.readObject();
             if(response == 1) {
-                JOptionPane.showMessageDialog(null, "Account successfully deleted.");
+                JOptionPane.showMessageDialog(null, "Account successfully deleted. Application will automatically close.");
                 deleteAccountDialog.dispose();   
-                this.dispose();
-                dialogBox.setVisible(true);
+                this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+                
                 loggedIn = false;
             }
             else {
