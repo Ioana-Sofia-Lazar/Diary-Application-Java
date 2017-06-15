@@ -5,9 +5,8 @@
         <group>
             <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/classes/Settings.java</file>
             <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/packets/loginPacket.java</file>
-            <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/packets/closeAppPacket.java</file>
-            <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/classes/EntryPanel.java</file>
             <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/classes/Entry.java</file>
+            <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/classes/EntryPanel.java</file>
             <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/main/ClientS.java</file>
             <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/main/Server.java</file>
             <file>file:/D:/FMI/AN2/Sem2/MDS/ProiectJava/src/main/ServerHandler.java</file>
