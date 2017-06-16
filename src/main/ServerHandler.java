@@ -314,7 +314,7 @@ public class ServerHandler extends Thread{
     private int addUser(String username, String password) {
         String query = "INSERT INTO user (username, password, birthdate, profile_pic) VALUES (?, ?, ?, ?);";
         try(PreparedStatement st = DBConnection.prepareStatement(query);) {
-            File imgfile = new File("default_profile.jpg");
+            File imgfile = new File("profile_pic.jpg");
             FileInputStream fin = new FileInputStream(imgfile);
             st.setString(1, username);
             st.setString(2, password);

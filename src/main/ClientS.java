@@ -71,6 +71,7 @@ public class ClientS extends javax.swing.JFrame {
         dialogBox.setVisible(true);
         jDateChooser2.setDate(Calendar.getInstance().getTime());
         appearancePageLoad();
+        
     }
     
     public boolean connectToServer(){
@@ -807,7 +808,6 @@ public class ClientS extends javax.swing.JFrame {
         addEntryDialog.setIconImages(null);
         addEntryDialog.setLocation(new java.awt.Point(500, 50));
         addEntryDialog.setModal(true);
-        addEntryDialog.setPreferredSize(new java.awt.Dimension(550, 604));
         addEntryDialog.setResizable(false);
         addEntryDialog.setSize(new java.awt.Dimension(550, 604));
 
@@ -957,10 +957,11 @@ public class ClientS extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
-                .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(newEntryAddPhotoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(newEntryPhotoPathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deletePhotoCheckbox))
+                    .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(newEntryAddPhotoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(deletePhotoCheckbox)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveNewEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1095,6 +1096,7 @@ public class ClientS extends javax.swing.JFrame {
         profileNameField.setForeground(new java.awt.Color(232, 224, 213));
         profileNameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         profileNameField.setText("Your Name Here");
+        profileNameField.setToolTipText("Click to edit field");
         profileNameField.setBorder(null);
         profileNameField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -1110,6 +1112,7 @@ public class ClientS extends javax.swing.JFrame {
         profileBirthdateField.setForeground(new java.awt.Color(232, 224, 213));
         profileBirthdateField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         profileBirthdateField.setText("Your Birthdate Here");
+        profileBirthdateField.setToolTipText("Click to edit field");
         profileBirthdateField.setBorder(null);
         profileBirthdateField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -1496,6 +1499,8 @@ public class ClientS extends javax.swing.JFrame {
     }
     
     private void changeCardDialog(String card) {
+        loginErrorLabel.setText("");
+        signupErrorLabel.setText("");
         loginContainer.removeAll();
         switch(card){
             case "login": loginContainer.add(loginPanel);
@@ -1576,7 +1581,10 @@ public class ClientS extends javax.swing.JFrame {
         profilePicLabel.setIcon(scaleImage(USER.getProfilePic(), width, height));
         
         // name
-        profileNameField.setText(USER.getName());
+        if(USER.getName() == null)
+            profileNameField.setText("Your Name Here");
+        else
+            profileNameField.setText(USER.getName());
         
         // birthdate
         profileBirthdateField.setText(USER.getBirthdate().toString());
@@ -1632,8 +1640,7 @@ public class ClientS extends javax.swing.JFrame {
     // if we close the login modal we exit the app
     private void dialogBoxWindowDeactivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_dialogBoxWindowDeactivated
         if(loggedIn == false)
-            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-            //this.dispose();
+            this.dispose();
     }//GEN-LAST:event_dialogBoxWindowDeactivated
 
     private void signupUsernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupUsernameFieldActionPerformed
@@ -1717,6 +1724,7 @@ public class ClientS extends javax.swing.JFrame {
     
     private void chooseProfilePicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseProfilePicButtonActionPerformed
         JFileChooser profilePicChooser = new JFileChooser();
+        profilePicChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         int result = profilePicChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = profilePicChooser.getSelectedFile();
@@ -1872,6 +1880,7 @@ public class ClientS extends javax.swing.JFrame {
 
     private void newEntryAddPhotoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEntryAddPhotoButtonActionPerformed
         JFileChooser profilePicChooser = new JFileChooser();
+        profilePicChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         int result = profilePicChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = profilePicChooser.getSelectedFile();
@@ -1986,6 +1995,8 @@ public class ClientS extends javax.swing.JFrame {
                 }
                 if(delPhoto)
                     e.setPic(null);
+                else
+                    e.setPic(entryPic);
                 e.setAdded(false);
             }
         }
@@ -2285,6 +2296,7 @@ public class ClientS extends javax.swing.JFrame {
         private void editEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {
             saveModficationsButton.setVisible(true);
             saveNewEntryButton.setVisible(false);
+            deletePhotoCheckbox.setSelected(false);
             editingEntryId = entry.getId();            
             setAddEntryFields(entry.getTitle(), entry.getLocation(), entry.getTime().getHours(), entry.getTime().getMinutes(), entry.getText(), "");
             deletePhotoCheckbox.setVisible(true);
