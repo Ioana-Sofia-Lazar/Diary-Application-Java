@@ -161,7 +161,7 @@ public class ServerHandler extends Thread{
             Map.Entry pair = (Map.Entry)it.next();
             ArrayList<Entry> en = (ArrayList<Entry>) pair.getValue();
             ByteArrayInputStream inStream = null; 
-            for(Entry e : en) {System.out.println("id " + id + " removed " + e.isRemoved() + " added " + e.isAdded());
+            for(Entry e : en) {
                 // prepare the photo
                 if(e.getPic() != null) {
                     try {

@@ -58,7 +58,16 @@ public class ClientS extends javax.swing.JFrame {
     
     public ClientS() {
         connectToServer();        
-        initComponents();   
+        initComponents();  
+        
+        ImageIcon img = new ImageIcon("diamond_64px.png");
+        this.setIconImage(img.getImage());
+        dialogBox.setIconImage(img.getImage());
+        changePasswordDialog.setIconImage(img.getImage());
+        deleteAccountDialog.setIconImage(img.getImage());
+        eraseEverythingDialog.setIconImage(img.getImage());
+        addEntryDialog.setIconImage(img.getImage());
+        
         dialogBox.setVisible(true);
         jDateChooser2.setDate(Calendar.getInstance().getTime());
         appearancePageLoad();
@@ -161,8 +170,6 @@ public class ClientS extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         newEntryAddPhotoButton = new javax.swing.JButton();
-        newEntryAddPhotoButton1 = new javax.swing.JButton();
-        newEntryAddPhotoButton2 = new javax.swing.JButton();
         jLabel24 = new javax.swing.JLabel();
         newEntryLocationField = new javax.swing.JTextField();
         newEntryPhotoPathLabel = new javax.swing.JLabel();
@@ -287,7 +294,8 @@ public class ClientS extends javax.swing.JFrame {
             }
         });
 
-        loginErrorLabel.setForeground(new java.awt.Color(255, 255, 255));
+        loginErrorLabel.setBackground(new java.awt.Color(153, 0, 0));
+        loginErrorLabel.setForeground(new java.awt.Color(153, 0, 0));
         loginErrorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         loginPasswordField.setBackground(new java.awt.Color(169, 102, 119));
@@ -429,7 +437,7 @@ public class ClientS extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(232, 224, 213));
         jLabel9.setText("Confirm password:");
 
-        signupErrorLabel.setForeground(new java.awt.Color(255, 255, 255));
+        signupErrorLabel.setForeground(new java.awt.Color(153, 0, 0));
         signupErrorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         signupPasswordField.setBackground(new java.awt.Color(169, 102, 119));
@@ -799,9 +807,12 @@ public class ClientS extends javax.swing.JFrame {
         addEntryDialog.setIconImages(null);
         addEntryDialog.setLocation(new java.awt.Point(500, 50));
         addEntryDialog.setModal(true);
-        addEntryDialog.setSize(new java.awt.Dimension(505, 604));
+        addEntryDialog.setPreferredSize(new java.awt.Dimension(550, 604));
+        addEntryDialog.setResizable(false);
+        addEntryDialog.setSize(new java.awt.Dimension(550, 604));
 
-        jLabel18.setText("New Timeline Entry");
+        jLabel18.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jLabel18.setText("Timeline Entry");
 
         newEntryTextArea.setColumns(20);
         newEntryTextArea.setRows(5);
@@ -844,20 +855,6 @@ public class ClientS extends javax.swing.JFrame {
             }
         });
 
-        newEntryAddPhotoButton1.setText("Add Audio");
-        newEntryAddPhotoButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newEntryAddPhotoButton1ActionPerformed(evt);
-            }
-        });
-
-        newEntryAddPhotoButton2.setText("Add Video");
-        newEntryAddPhotoButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newEntryAddPhotoButton2ActionPerformed(evt);
-            }
-        });
-
         jLabel24.setText("Location: ");
 
         deletePhotoCheckbox.setText("Delete photo");
@@ -874,61 +871,59 @@ public class ClientS extends javax.swing.JFrame {
         addEntryDialogLayout.setHorizontalGroup(
             addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addEntryDialogLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addEntryDialogLayout.createSequentialGroup()
-                        .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(addEntryDialogLayout.createSequentialGroup()
-                                .addGap(190, 190, 190)
-                                .addComponent(jLabel18))
-                            .addGroup(addEntryDialogLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(addEntryDialogLayout.createSequentialGroup()
-                                        .addComponent(jLabel19)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(newEntryHourSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(newEntryMinSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(addEntryDialogLayout.createSequentialGroup()
-                                        .addComponent(jLabel22)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(newEntryTitleField, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(addEntryDialogLayout.createSequentialGroup()
-                                                .addComponent(jLabel20)
-                                                .addGap(26, 26, 26)
-                                                .addComponent(jLabel21)))))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3)
+                        .addContainerGap())
                     .addGroup(addEntryDialogLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addEntryDialogLayout.createSequentialGroup()
+                            .addGroup(addEntryDialogLayout.createSequentialGroup()
+                                .addComponent(jLabel19)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(newEntryHourSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(newEntryMinSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(addEntryDialogLayout.createSequentialGroup()
+                                .addComponent(jLabel22)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(newEntryTitleField, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(addEntryDialogLayout.createSequentialGroup()
+                                        .addComponent(jLabel20)
+                                        .addGap(26, 26, 26)
+                                        .addComponent(jLabel21))))
+                            .addGroup(addEntryDialogLayout.createSequentialGroup()
+                                .addComponent(jLabel24)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(newEntryLocationField, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addEntryDialogLayout.createSequentialGroup()
+                        .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(addEntryDialogLayout.createSequentialGroup()
+                                .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(addEntryDialogLayout.createSequentialGroup()
+                                        .addComponent(jLabel23)
+                                        .addGap(0, 191, Short.MAX_VALUE))
+                                    .addGroup(addEntryDialogLayout.createSequentialGroup()
+                                        .addComponent(newEntryAddPhotoButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(deletePhotoCheckbox)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(newEntryPhotoPathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(addEntryDialogLayout.createSequentialGroup()
                                 .addGap(80, 80, 80)
                                 .addComponent(cancelNewEntryButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(saveModficationsButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(18, 18, 18)
                                 .addComponent(saveNewEntryButton)
-                                .addGap(93, 93, 93))
-                            .addGroup(addEntryDialogLayout.createSequentialGroup()
-                                .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(addEntryDialogLayout.createSequentialGroup()
-                                        .addComponent(jLabel24)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(newEntryLocationField, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(addEntryDialogLayout.createSequentialGroup()
-                                        .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel23)
-                                            .addComponent(newEntryAddPhotoButton)
-                                            .addComponent(newEntryAddPhotoButton1)
-                                            .addComponent(newEntryAddPhotoButton2))
-                                        .addGap(99, 99, 99)
-                                        .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(newEntryPhotoPathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(deletePhotoCheckbox))))
-                                .addGap(0, 29, Short.MAX_VALUE)))))
-                .addContainerGap())
+                                .addGap(63, 63, 63)))
+                        .addGap(68, 68, 68))))
+            .addGroup(addEntryDialogLayout.createSequentialGroup()
+                .addGap(217, 217, 217)
+                .addComponent(jLabel18)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         addEntryDialogLayout.setVerticalGroup(
             addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -963,18 +958,14 @@ public class ClientS extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(newEntryAddPhotoButton)
+                    .addComponent(newEntryAddPhotoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(newEntryPhotoPathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deletePhotoCheckbox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(newEntryAddPhotoButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(newEntryAddPhotoButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addGroup(addEntryDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveNewEntryButton)
-                    .addComponent(cancelNewEntryButton)
-                    .addComponent(saveModficationsButton))
+                    .addComponent(saveNewEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelNewEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveModficationsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1412,7 +1403,7 @@ public class ClientS extends javax.swing.JFrame {
         timelinePanel.setPreferredSize(new java.awt.Dimension(940, 500));
 
         jLabel10.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(181, 196, 201));
+        jLabel10.setForeground(new java.awt.Color(0, 51, 102));
         jLabel10.setText("Timeline");
 
         addEntryButton.setBackground(new java.awt.Color(181, 196, 201));
@@ -1447,7 +1438,7 @@ public class ClientS extends javax.swing.JFrame {
                     .addGroup(timelinePanelLayout.createSequentialGroup()
                         .addGap(412, 412, 412)
                         .addComponent(addEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(543, Short.MAX_VALUE))
+                .addContainerGap(423, Short.MAX_VALUE))
         );
         timelinePanelLayout.setVerticalGroup(
             timelinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1457,7 +1448,7 @@ public class ClientS extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(addEntryButton)
                 .addGap(29, 29, 29)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1277, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
         );
 
         calendarPanel.add(timelinePanel, java.awt.BorderLayout.CENTER);
@@ -1558,6 +1549,11 @@ public class ClientS extends javax.swing.JFrame {
                      c3 = Color.decode("#E2BAC5"); // fundal timeline
                      break;
         }
+        dialogBox.setBackground(c3);
+        changePasswordDialog.setBackground(c3);
+        deleteAccountDialog.setBackground(c3);
+        eraseEverythingDialog.setBackground(c3);
+        addEntryDialog.setBackground(c3);
         
         MenuPanel.setBackground(c2);
         
@@ -1636,7 +1632,8 @@ public class ClientS extends javax.swing.JFrame {
     // if we close the login modal we exit the app
     private void dialogBoxWindowDeactivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_dialogBoxWindowDeactivated
         if(loggedIn == false)
-            this.dispose();
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            //this.dispose();
     }//GEN-LAST:event_dialogBoxWindowDeactivated
 
     private void signupUsernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupUsernameFieldActionPerformed
@@ -1872,14 +1869,6 @@ public class ClientS extends javax.swing.JFrame {
     private void cancelEraseEverythingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelEraseEverythingButtonActionPerformed
         eraseEverythingDialog.dispose();
     }//GEN-LAST:event_cancelEraseEverythingButtonActionPerformed
-
-    private void newEntryAddPhotoButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEntryAddPhotoButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_newEntryAddPhotoButton1ActionPerformed
-
-    private void newEntryAddPhotoButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEntryAddPhotoButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_newEntryAddPhotoButton2ActionPerformed
 
     private void newEntryAddPhotoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEntryAddPhotoButtonActionPerformed
         JFileChooser profilePicChooser = new JFileChooser();
@@ -2408,8 +2397,6 @@ public class ClientS extends javax.swing.JFrame {
     private javax.swing.JPasswordField loginPasswordField;
     private javax.swing.JTextField loginUsernameField;
     private javax.swing.JButton newEntryAddPhotoButton;
-    private javax.swing.JButton newEntryAddPhotoButton1;
-    private javax.swing.JButton newEntryAddPhotoButton2;
     private com.toedter.components.JSpinField newEntryHourSpinner;
     private javax.swing.JTextField newEntryLocationField;
     private com.toedter.components.JSpinField newEntryMinSpinner;
